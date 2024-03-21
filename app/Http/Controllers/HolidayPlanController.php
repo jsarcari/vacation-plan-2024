@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\HolidayPlan;
 
 class HolidayPlanController extends Controller
 {
     
     public function index(Request $request)
     {
-        $vacations = ["holiday1", "holiday 2", "vacation friends"];
+        $vacations = HolidayPlan::all();
 
         return view('vacations.index')->with('vacations', $vacations);
     }
@@ -21,7 +22,13 @@ class HolidayPlanController extends Controller
 
     public function store(Request $request)
     {
-        $titleHolidayPlan = $request->input('title');
-        //DB::insert()
+        HolidayPlan::create($request->all());
+        return to_route('vacations.index');
+    }
+
+    public function destroy(Request $request)
+    {
+        HolidayPlan::destroy($request->vacation);
+        return to_route('vacations.index');
     }
 }
