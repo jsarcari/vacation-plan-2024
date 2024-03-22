@@ -3,7 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\HolidayPlan;
+use App\Http\Controllers\HolidayPlanController;
 use App\Http\Requests\VacationsFormRequest;
+use App\Http\Controllers\PdfController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +29,10 @@ Route::get('/vacations', function () {
 
 // Access in http://localhost:8000/api/vacations as method POST, sending a new HolidayPlan in JSON format
 Route::post('/vacations', function (VacationsFormRequest $request) {
+    $holiday = new HolidayPlanController();
+    if (!$holiday->validateDate($request->date)) {
+        return 'Invalid date format';
+    }
     return response()->json(HolidayPlan::create($request->all()));
 });
 
@@ -36,6 +42,10 @@ Route::get('/vacations/{id}', function ($id) {
 
 Route::put('/vacations/{vacation}', function (HolidayPlan $vacation, VacationsFormRequest $request) {
     $vacation->fill($request->except('_token'));
+    $holiday = new HolidayPlanController();
+    if (!$holiday->validateDate($request->date)) {
+        return 'Invalid date format';
+    }
     $vacation->save();
     return $vacation;
 });
@@ -44,3 +54,5 @@ Route::delete('/vacations/{id}', function ($id) {
     HolidayPlan::destroy($id);
     return response()->noContent();
 });
+
+Route::get('/generate-pdf/{id}', [PdfController::class, 'download']);

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\HolidayPlan;
 use App\Http\Requests\VacationsFormRequest;
 use App\Http\Controllers\PdfController;
+use DateTime;
 
 class HolidayPlanController extends Controller
 {
@@ -53,5 +54,11 @@ class HolidayPlanController extends Controller
         $vacation->participants = $request->participants;
         $vacation->save();
         return to_route('vacations.index')->with('message.success', 'Holiday plan updated with success');
+    }
+
+    function validateDate($date)
+    {
+        $d = DateTime::createFromFormat('Y-m-d', $date);
+        return $d && $d->format('Y-m-d') == $date;
     }
 }
