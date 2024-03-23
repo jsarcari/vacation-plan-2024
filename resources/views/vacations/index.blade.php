@@ -16,7 +16,7 @@
                     @method('DELETE')
                     <button class="btn btn-danger btn-sm">X</button>
                 </form>
-                <a href="{{ route('generate-pdf', $vacation->id) }}" class="btn btn-warning btn-sm">PDF</a>
+                <a href="{{ route('generate-pdf', $vacation->id) }}" class="btn btn-warning btn-sm ms-2">PDF</a>
             </span>
         </li>
         @endforeach
