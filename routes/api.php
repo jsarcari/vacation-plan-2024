@@ -23,8 +23,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Access in http://localhost:8000/api/vacations as method GET
-Route::get('/vacations', function () {
-    return HolidayPlan::all();
+Route::get('/vacations', function (Request $request) {
+    if (!$request->has('title')) {
+        return HolidayPlan::paginate(10);
+    }
+
+    return HolidayPlan::whereTitle($request->title)->paginate(10); // filter by title
 });
 
 // Access in http://localhost:8000/api/vacations as method POST, sending a new HolidayPlan in JSON format
